@@ -96,15 +96,27 @@ ksu_B_10 = KeyboardButton('Пожалуй, пойду')
 kb_browser = ReplyKeyboardMarkup(resize_keyboard=True)
 kb_browser.row(ksu_B_1, ksu_B_2).row(ksu_B_3).add(ksu_B_9, ksu_B_10)
 
+# Браузер_Музыка_1
 ksu_M_1 = KeyboardButton('+')
 ksu_M_2 = KeyboardButton('<')
 ksu_M_3 = KeyboardButton('||')
+ksu_M1_3 = KeyboardButton('O')
 ksu_M_4 = KeyboardButton('>')
 ksu_M_5 = KeyboardButton('-')
 ksu_M_9 = KeyboardButton('Назад')
-ksu_M_10 = KeyboardButton('Пожалуй, пойду')
+ksu_M_10 = KeyboardButton('Сайт')
 kb_music = ReplyKeyboardMarkup(resize_keyboard=True)
 kb_music.add(ksu_M_1).row(ksu_M_2, ksu_M_3, ksu_M_4).add(ksu_M_5).add(ksu_M_9, ksu_M_10)
+
+kb_music1 = ReplyKeyboardMarkup(resize_keyboard=True)
+kb_music1.add(ksu_M_1).row(ksu_M_2, ksu_M1_3, ksu_M_4).add(ksu_M_5).add(ksu_M_9, ksu_M_10)
+
+# Браузер_Музыка_Сайт
+ksu_site_1 = KeyboardButton('VK')
+ksu_site_2 = KeyboardButton('Яндекс.Музыка')
+ksu_site_3 = KeyboardButton('Назад')
+ksu_sites = ReplyKeyboardMarkup(resize_keyboard=True)
+ksu_sites.row(ksu_site_1, ksu_site_2).add(ksu_site_3)
 
 
 # Сон/Выкл
@@ -116,12 +128,6 @@ kb_son = ReplyKeyboardMarkup(resize_keyboard=True)
 kb_son.row(ksu_s_1, ksu_s_2).add(ksu_R_3).insert(ksu_R_4)
 
 
-
-
-#
-ksu_M_1 = KeyboardButton('01')
-kb_ksu_M = ReplyKeyboardMarkup(resize_keyboard=True, row_width=4)
-kb_ksu_M.row(ksu_M_1)
 '''*********************************************************'''
 
 

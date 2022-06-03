@@ -5,13 +5,13 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.dispatcher.filters import Text
 import asyncio
-import hashlib
 
 # Локальные импорты
 from data_base import sqlite_db, open_db_file
-from config import admin_id                                                                                             # Че это вообще такое?
+from config import admin_id
 from create_bot import dp, bot
-from keyboards import kb_client, kb_ksu_С, kb_ksu_R, kb_son, kb_browser, kb_music
+from keyboards import kb_client, kb_ksu_С, kb_ksu_R, kb_son, \
+    kb_browser, kb_music, kb_music1, ksu_sites
 
 # Для "Ксю"
 from random import *
@@ -33,7 +33,7 @@ import pyautogui
 import keyboard
 
 
-
+# Доводя до идеала типа можно написать кучу проверок, чтобы работало на "ура!", но это когда-то потом
 
 
 '''***********************************ОБЩИЙ******************************************************************'''
@@ -82,6 +82,8 @@ class Ksu_search(StatesGroup):
     apps = State()
 
     reader = State()
+
+    sites = State()
 
 
 # Начало диалога загрузки.
@@ -173,13 +175,17 @@ async def load_browser3(message: Message):
     await Ksu_search.browser.set()
     return None
 
-async def load_browser4(message: Message, state: FSMContext):
+async def load_browser4(message: Message):
     if message.text == '+':
         keyboard.send("volume up")
     elif message.text == '<':
         keyboard.send("previous track")
     elif message.text == '||':
         keyboard.send("play/pause media")
+        await message.answer('||', reply_markup=kb_music1)
+    elif message.text == 'O':
+        keyboard.send("play/pause media")
+        await message.answer('O', reply_markup=kb_music)
     elif message.text == '>':
         keyboard.send("next track")
     elif message.text == '-':
@@ -188,15 +194,31 @@ async def load_browser4(message: Message, state: FSMContext):
         await Ksu_search.browser.set()
         await message.answer('Что делаем?', reply_markup=kb_browser)
         return None
-    elif message.text == 'Пожалуй, пойду':
-        await state.finish()
-        await message.answer("Пока-пока!", reply_markup=kb_client)
+    elif message.text == 'Сайт':
+        await Ksu_search.sites.set()
+        await message.answer("Ну-ка, что у нас тут?", reply_markup=ksu_sites)
         return None
     else:
         await message.reply('Ошибка. Воспользуйся кнопками.')
         await Ksu_search.browser4.set()
         return None
 
+async def load_sites(message: Message):
+    if message.text == 'VK':
+        webbrowser.open('https://vk.com/audios144901827')
+        await Ksu_search.browser4.set()
+        await message.answer("Готово", reply_markup=kb_music)
+    elif message.text == 'Яндекс.Музыка':
+        webbrowser.open('https://music.yandex.ru/home')
+        await Ksu_search.browser4.set()
+        await message.answer("Готово", reply_markup=kb_music)
+    elif message.text == 'Назад':
+        await Ksu_search.browser4.set()
+        await message.answer("Ой", reply_markup=kb_music)
+    else:
+        await message.reply('Ошибка. Воспользуйся кнопками.')
+        await Ksu_search.browser4.set()
+        return None
 
 '''++++++++++++++++++Выключение++++++++++++++++++'''
 async def sleeping():
@@ -323,13 +345,18 @@ def register_message_client(dp : Dispatcher):
     dp.register_message_handler(cancel_handler, Text(equals='отмена', ignore_case=True), state="*")
 
     dp.register_message_handler(load_choice, state=Ksu_search.choice)
+
     dp.register_message_handler(load_browser, state=Ksu_search.browser)
     dp.register_message_handler(load_browser2, state=Ksu_search.browser2)
     dp.register_message_handler(load_browser3, state=Ksu_search.browser3)
     dp.register_message_handler(load_browser4, state=Ksu_search.browser4)
+    dp.register_message_handler(load_sites, state=Ksu_search.sites)
+
     dp.register_message_handler(load_sleep, state=Ksu_search.sleep)
     dp.register_message_handler(load_sleep2, state=Ksu_search.sleep2)
+
     dp.register_message_handler(load_apps, state=Ksu_search.apps)
+
     dp.register_message_handler(load_reader, state=Ksu_search.reader)
 
     dp.register_message_handler(load_screenshot, Text(equals='скриншот', ignore_case=True), state="*")
