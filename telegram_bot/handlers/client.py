@@ -7,16 +7,16 @@ from aiogram.dispatcher.filters import Text
 import asyncio
 
 # Локальные импорты
-from data_base import sqlite_db, open_db_file
+# from data_base import sqlite_db, open_db_file
 from config import admin_id
 from create_bot import dp, bot
 from keyboards import kb_client, kb_ksu_С, kb_ksu_R, kb_son, \
-    kb_browser, kb_music, kb_music1, ksu_sites
+    kb_browser, kb_music, kb_music1, ksu_sites, kb_sc, kb_video, kb_video1
 
 # Для "Ксю"
-from random import *
+# from random import *
 import datetime
-import radar
+# import radar
 
 # Браузер
 import webbrowser
@@ -25,12 +25,23 @@ import webbrowser
 import subprocess
 import sys
 import os
+from subprocess import Popen
 
 # Скрин
 import pyautogui
+import cv2
 
 # Музыка
 import keyboard
+from pynput.keyboard import Key, Controller
+kb = Controller()
+
+def press(button):
+    kb.press(button)
+    kb.release(button)
+
+
+
 
 
 # Доводя до идеала типа можно написать кучу проверок, чтобы работало на "ура!", но это когда-то потом
@@ -76,6 +87,7 @@ class Ksu_search(StatesGroup):
     browser2 = State()
     browser3 = State()
     browser4 = State()
+    video = State()
 
     sleep = State()
     sleep2 = State()
@@ -84,6 +96,8 @@ class Ksu_search(StatesGroup):
     reader = State()
 
     sites = State()
+
+    screenshot = State()
 
 
 # Начало диалога загрузки.
@@ -111,7 +125,9 @@ async def load_choice(message: Message):
         await message.answer('Что делаем?', reply_markup=kb_ksu_R)
 
     elif message.text == 'Скриншот':
-        await load_screenshot(message)
+        await Ksu_search.screenshot.set()
+        await message.answer('Кого будем снимать?', reply_markup=kb_sc)
+
     elif message.text == 'Сообщение':
         await Ksu_search.reader.set()
         await message.answer('Если захочешь выйти просто напиши "стоп".', reply_markup=ReplyKeyboardRemove())
@@ -146,6 +162,10 @@ async def load_browser(message: Message, state: FSMContext):
     elif message.text == "Музыка":
         await Ksu_search.browser4.set()
         await message.answer("Кайф", reply_markup=kb_music)
+
+    elif message.text == "Видео":
+        await Ksu_search.video.set()
+        await message.answer("Кайф", reply_markup=kb_video)
 
     elif message.text == 'Назад':
         await ksu(message)
@@ -220,6 +240,32 @@ async def load_sites(message: Message):
         await Ksu_search.browser4.set()
         return None
 
+async def load_video(message: Message):
+    if message.text == '+':
+        press(Key.up)
+    elif message.text == '<':
+        press(Key.left)
+    elif message.text == '||':
+        keyboard.send("spacebar")
+        await message.answer('||', reply_markup=kb_video1)
+    elif message.text == 'O':
+        keyboard.send("spacebar")
+        await message.answer('O', reply_markup=kb_video)
+    elif message.text == '>':
+        press(Key.left)
+    elif message.text == '-':
+        press(Key.down)
+    elif message.text == 'full':
+        keyboard.send("f")
+    elif message.text == 'Назад':
+        await Ksu_search.browser.set()
+        await message.answer('Что делаем?', reply_markup=kb_browser)
+        return None
+    else:
+        await message.reply('Ошибка. Воспользуйся кнопками.')
+        await Ksu_search.video.set()
+        return None
+
 '''++++++++++++++++++Выключение++++++++++++++++++'''
 async def sleeping():
     sleeping = subprocess.Popen(["powershell.exe", os.path.abspath('slepping.ps1')], stdout=sys.stdout)
@@ -237,6 +283,10 @@ async def load_sleep(message: Message, state: FSMContext):
     elif message.text == 'Сон по таймеру':
         await Ksu_search.sleep2.set()
         await message.answer("Хорошо. Напиши время через сколько произвести выключение в минутах: ", reply_markup=ReplyKeyboardRemove())
+
+    elif message.text == 'Экран':
+        Popen(os.path.abspath('screen.bat'))
+        return None
 
     elif message.text == 'Назад':
         await ksu(message)
@@ -290,9 +340,32 @@ async def load_apps(message: Message, state: FSMContext):
 
 # 4 - Скриншот
 async def load_screenshot(message: Message):
-    pyautogui.screenshot('screenshot/screenshot.png')
-    await bot.send_photo(message.from_user.id, photo=open('screenshot/screenshot.png', 'rb'))
-    return None
+    if message.text == 'Экран':
+        pyautogui.screenshot('screenshot/screenshot.png')
+        await bot.send_photo(message.from_user.id, photo=open('screenshot/screenshot.png', 'rb'))
+        return None
+    elif message.text == 'Вебкамера':
+        try:
+            cap = cv2.VideoCapture(0)  # Включаем первую камеру
+            for i in range(30):  # "Прогреваем" камеру, чтобы снимок не был тёмным
+                cap.read()
+            ret, frame = cap.read()  # Делаем снимок
+            cv2.imwrite('screenshot/cam.png', frame)  # Записываем в файл
+            cap.release()  # Отключаем камеру
+
+            await bot.send_photo(message.from_user.id, photo=open('screenshot/cam.png', 'rb'))
+            return None
+        except:
+            await message.reply('Камера не подключена :(')
+            return None
+    elif message.text == 'Назад':
+        await ksu(message)
+        return None
+    else:
+        await message.reply('Ошибка. Воспользуйся кнопками.')
+        await Ksu_search.apps.set()
+        return None
+
 
 # 5 - Сообщение
 async def load_reader(message: Message):
@@ -351,6 +424,7 @@ def register_message_client(dp : Dispatcher):
     dp.register_message_handler(load_browser3, state=Ksu_search.browser3)
     dp.register_message_handler(load_browser4, state=Ksu_search.browser4)
     dp.register_message_handler(load_sites, state=Ksu_search.sites)
+    dp.register_message_handler(load_video, state=Ksu_search.video)
 
     dp.register_message_handler(load_sleep, state=Ksu_search.sleep)
     dp.register_message_handler(load_sleep2, state=Ksu_search.sleep2)
@@ -359,8 +433,7 @@ def register_message_client(dp : Dispatcher):
 
     dp.register_message_handler(load_reader, state=Ksu_search.reader)
 
-    dp.register_message_handler(load_screenshot, Text(equals='скриншот', ignore_case=True), state="*")
-
+    dp.register_message_handler(load_screenshot, state=Ksu_search.screenshot)
     '''^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^'''
 '''**********************************************************************************************************'''
 
