@@ -113,13 +113,14 @@ ksu_M_3 = KeyboardButton('||')
 ksu_M1_3 = KeyboardButton('O')
 ksu_M_4 = KeyboardButton('>')
 ksu_M_5 = KeyboardButton('-')
+ksu_M_6 = KeyboardButton('Мышь')
 ksu_M_9 = KeyboardButton('Назад')
 ksu_M_10 = KeyboardButton('Сайт')
 kb_music = ReplyKeyboardMarkup(resize_keyboard=True)
-kb_music.add(ksu_M_1).row(ksu_M_2, ksu_M_3, ksu_M_4).add(ksu_M_5).add(ksu_M_9, ksu_M_10)
+kb_music.add(ksu_M_1).row(ksu_M_2, ksu_M_3, ksu_M_4).add(ksu_M_5).add(ksu_M_9, ksu_M_10, ksu_M_6)
 
 kb_music1 = ReplyKeyboardMarkup(resize_keyboard=True)
-kb_music1.add(ksu_M_1).row(ksu_M_2, ksu_M1_3, ksu_M_4).add(ksu_M_5).add(ksu_M_9, ksu_M_10)
+kb_music1.add(ksu_M_1).row(ksu_M_2, ksu_M1_3, ksu_M_4).add(ksu_M_5).add(ksu_M_9, ksu_M_10, ksu_M_6)
 
 # Браузер_Видео
 ksu_V_1 = KeyboardButton('+')
@@ -129,12 +130,13 @@ ksu_V1_3 = KeyboardButton('O')
 ksu_V_4 = KeyboardButton('>')
 ksu_V_5 = KeyboardButton('-')
 ksu_V_6 = KeyboardButton('full')
+ksu_V_7 = KeyboardButton('Мышь')
 ksu_V_9 = KeyboardButton('Назад')
 kb_video = ReplyKeyboardMarkup(resize_keyboard=True)
-kb_video.add(ksu_V_1).row(ksu_V_2, ksu_V_3, ksu_V_4).add(ksu_V_5).add(ksu_V_6).add(ksu_V_9)
+kb_video.add(ksu_V_1).row(ksu_V_2, ksu_V_3, ksu_V_4).add(ksu_V_5).add(ksu_V_9, ksu_V_6, ksu_V_7)
 
 kb_video1 = ReplyKeyboardMarkup(resize_keyboard=True)
-kb_video1.add(ksu_V_1).row(ksu_V_2, ksu_V1_3, ksu_V_4).add(ksu_V_5).add(ksu_V_6).add(ksu_M_9)
+kb_video1.add(ksu_V_1).row(ksu_V_2, ksu_V1_3, ksu_V_4).add(ksu_V_5).add(ksu_V_9, ksu_V_6, ksu_V_7)
 
 # Браузер_Музыка_Сайт
 ksu_site_1 = KeyboardButton('VK')
@@ -167,11 +169,17 @@ ksu_mouse1_4 = KeyboardButton('→→')
 ksu_mouse_5 = KeyboardButton('↓')
 ksu_mouse1_5 = KeyboardButton('↓↓')
 ksu_mouse_6 = KeyboardButton('Назад')
+ksu_mouse_16 = KeyboardButton('<')
+ksu_mouse_61 = KeyboardButton('>')
+ksu_mouse_alt = KeyboardButton('alt')
+ksu_mouse_tab = KeyboardButton('tab')
 ksu_mouse_7 = KeyboardButton('up')
 ksu_mouse_8 = KeyboardButton('down')
+ksu_mouse_m = KeyboardButton('M')
+ksu_mouse_f = KeyboardButton('F')
 kb_mouse = ReplyKeyboardMarkup(resize_keyboard=True)
-kb_mouse.add(ksu_mouse1_1, ksu_mouse_1, ksu_mouse_7).row(ksu_mouse1_2, ksu_mouse_2, ksu_mouse_3, ksu_mouse1_3, ksu_mouse2_3, ksu_mouse_4, ksu_mouse1_4).add(ksu_mouse1_5, ksu_mouse_5, ksu_mouse_8).add(ksu_mouse_6)
-
+kb_mouse.add(ksu_mouse1_1, ksu_mouse_1, ksu_mouse_7).row(ksu_mouse1_2, ksu_mouse_2, ksu_mouse_3, ksu_mouse1_3, ksu_mouse2_3, ksu_mouse_4, ksu_mouse1_4)\
+     .add(ksu_mouse1_5, ksu_mouse_5, ksu_mouse_8).row(ksu_mouse_6, ksu_mouse_16, ksu_mouse_61, ksu_mouse_alt, ksu_mouse_tab, ksu_mouse_m, ksu_mouse_f)
 
 '''*********************************************************'''
 

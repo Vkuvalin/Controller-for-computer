@@ -66,6 +66,7 @@ import keyboard
 '''***********************************ОБЩИЙ******************************************************************'''
 '''*********************ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ*************************'''
 chat_count = 0
+altcount = 0
 '''*******************************************************************'''
 '''**********************************************************************************************************'''
 
@@ -236,6 +237,9 @@ async def load_browser4(message: Message):
         await Ksu_search.sites.set()
         await message.answer("Ну-ка, что у нас тут?", reply_markup=ksu_sites)
         return None
+    elif message.text == 'Мышь':
+        await Ksu_search.mouse.set()
+        await message.answer('Мышь подключена', reply_markup=kb_mouse)
     else:
         await message.reply('Ошибка. Воспользуйся кнопками.')
         await Ksu_search.browser4.set()
@@ -282,6 +286,9 @@ async def load_video(message: Message):
         press(Key.down)
     elif message.text == 'full':
         keyboard.send("f")
+    elif message.text == 'Мышь':
+        await Ksu_search.mouse.set()
+        await message.answer('Мышь подключена', reply_markup=kb_mouse)
     elif message.text == 'Назад':
         await Ksu_search.browser.set()
         await message.answer('Что делаем?', reply_markup=kb_browser)
@@ -426,6 +433,7 @@ async def load_reader(message: Message):
 
 # 6 - Мышь
 async def load_mouse(message: Message):
+    global altcount
     from pynput.mouse import Button, Controller
     mouse = Controller()
 
@@ -457,6 +465,27 @@ async def load_mouse(message: Message):
         mouse.scroll(0, 5)
     elif message.text == 'down':
         mouse.scroll(0, -5)
+    elif message.text == '<':
+        keyboard.send("ctrl+shift+tab")
+    elif message.text == '>':
+        keyboard.send("ctrl+tab")
+    elif message.text == 'alt':
+        keyboard.press("alt")
+        if altcount == 1:
+            keyboard.release("alt")
+            altcount = 0
+        else:
+            altcount += 1
+    elif message.text == 'tab':
+        keyboard.send("tab")
+
+    elif message.text == 'M':
+        await Ksu_search.browser4.set()
+        await message.answer("Кайф", reply_markup=kb_music)
+    elif message.text == 'F':
+        await Ksu_search.video.set()
+        await message.answer("Кайф", reply_markup=kb_video)
+
     elif message.text == 'Назад':
         await Ksu_search.choice.set()
         await message.answer('Выбери режим: ', reply_markup=kb_ksu_С)
