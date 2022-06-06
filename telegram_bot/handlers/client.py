@@ -11,7 +11,7 @@ import asyncio
 from config import admin_id
 from create_bot import dp, bot
 from keyboards import kb_client, kb_ksu_С, kb_ksu_R, kb_son, \
-    kb_browser, kb_music, kb_music1, ksu_sites, kb_sc, kb_video, kb_video1
+    kb_browser, kb_music, kb_music1, ksu_sites, kb_sc, kb_video, kb_video1, kb_mouse
 
 # Для "Ксю"
 # from random import *
@@ -31,20 +31,36 @@ from subprocess import Popen
 import pyautogui
 import cv2
 
-# Музыка
+# Клавиатура/мышь
 import keyboard
-from pynput.keyboard import Key, Controller
-kb = Controller()
+# from pynput.keyboard import Key, Controller
+# from pynput.mouse import Button, Controller
 
-def press(button):
-    kb.press(button)
-    kb.release(button)
+# mouse = Controller()
+# kb = Controller()
+#
+# def press(button):
+#     kb.press(button)
+#     kb.release(button)
+
+
+
+
 
 
 
 
 
 # Доводя до идеала типа можно написать кучу проверок, чтобы работало на "ура!", но это когда-то потом
+# А может для красоты и емкости сделать рили пульты хотя бы через инлайн кнопки?
+# Замечание убрать
+"""
+    else:
+        await message.reply('Ошибка. Воспользуйся кнопками.')
+        await Ksu_search.browser4.set()  <----- вот эту хуйню
+        return None
+
+"""
 
 
 '''***********************************ОБЩИЙ******************************************************************'''
@@ -92,12 +108,10 @@ class Ksu_search(StatesGroup):
     sleep = State()
     sleep2 = State()
     apps = State()
-
     reader = State()
-
     sites = State()
-
     screenshot = State()
+    mouse = State()
 
 
 # Начало диалога загрузки.
@@ -130,8 +144,12 @@ async def load_choice(message: Message):
 
     elif message.text == 'Сообщение':
         await Ksu_search.reader.set()
-        await message.answer('Если захочешь выйти просто напиши "стоп".', reply_markup=ReplyKeyboardRemove())
+        await message.answer('Если захочешь выйти, просто напиши "стоп".', reply_markup=ReplyKeyboardRemove())
         await message.answer('Введи текст:')
+
+    elif message.text == 'Мышь':
+        await Ksu_search.mouse.set()
+        await message.answer('Мышь подключена', reply_markup=kb_mouse)
     else:
         await message.answer('Ой, а я таких слов не знаю. Воспользуйся, пожалуйста, кнопками.')
 
@@ -241,6 +259,13 @@ async def load_sites(message: Message):
         return None
 
 async def load_video(message: Message):
+    from pynput.keyboard import Key, Controller
+    kb = Controller()
+
+    def press(button):
+        kb.press(button)
+        kb.release(button)
+
     if message.text == '+':
         press(Key.up)
     elif message.text == '<':
@@ -399,6 +424,47 @@ async def load_reader(message: Message):
         await Ksu_search.choice.set()
         await message.answer('Выбери режим: ', reply_markup=kb_ksu_С)
 
+# 6 - Мышь
+async def load_mouse(message: Message):
+    from pynput.mouse import Button, Controller
+    mouse = Controller()
+
+    if message.text == '↑':
+        mouse.move(0, -10)
+    elif message.text == '↑↑':
+        mouse.move(0, -100)
+    elif message.text == '←':
+        mouse.move(-10, 0)
+    elif message.text == '←←':
+        mouse.move(-100, 0)
+    elif message.text == 'Л':
+        mouse.press(Button.left)
+        mouse.release(Button.left)
+    elif message.text == '2Л':
+        mouse.click(Button.left, 2)
+    elif message.text == 'П':
+        mouse.press(Button.right)
+        mouse.release(Button.right)
+    elif message.text == '→':
+        mouse.move(10, 0)
+    elif message.text == '→→':
+        mouse.move(100, 0)
+    elif message.text == '↓':
+        mouse.move(0, 10)
+    elif message.text == '↓↓':
+        mouse.move(0, 100)
+    elif message.text == 'up':
+        mouse.scroll(0, 5)
+    elif message.text == 'down':
+        mouse.scroll(0, -5)
+    elif message.text == 'Назад':
+        await Ksu_search.choice.set()
+        await message.answer('Выбери режим: ', reply_markup=kb_ksu_С)
+        return None
+    else:
+        await message.reply('Ошибка. Воспользуйся кнопками.')
+        return None
+
 
 
 '''^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^'''
@@ -425,15 +491,12 @@ def register_message_client(dp : Dispatcher):
     dp.register_message_handler(load_browser4, state=Ksu_search.browser4)
     dp.register_message_handler(load_sites, state=Ksu_search.sites)
     dp.register_message_handler(load_video, state=Ksu_search.video)
-
     dp.register_message_handler(load_sleep, state=Ksu_search.sleep)
     dp.register_message_handler(load_sleep2, state=Ksu_search.sleep2)
-
     dp.register_message_handler(load_apps, state=Ksu_search.apps)
-
     dp.register_message_handler(load_reader, state=Ksu_search.reader)
-
     dp.register_message_handler(load_screenshot, state=Ksu_search.screenshot)
+    dp.register_message_handler(load_mouse, state=Ksu_search.mouse)
     '''^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^'''
 '''**********************************************************************************************************'''
 

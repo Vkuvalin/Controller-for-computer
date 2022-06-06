@@ -73,12 +73,13 @@ ksu_С_2 = KeyboardButton('Сон/Выкл')
 ksu_С_3 = KeyboardButton('Приложения')
 ksu_С_4 = KeyboardButton('Скриншот')
 ksu_С_5 = KeyboardButton('Сообщение')
+ksu_С_6 = KeyboardButton('Мышь')
 ksu_С_10 = KeyboardButton('Отмена')
 kb_ksu_С = ReplyKeyboardMarkup(resize_keyboard=True)
-kb_ksu_С.row(ksu_С_1, ksu_С_2, ksu_С_3).row(ksu_С_4, ksu_С_5).add(ksu_С_10)
+kb_ksu_С.row(ksu_С_1, ksu_С_2, ksu_С_3).row(ksu_С_4, ksu_С_5, ksu_С_6).add(ksu_С_10)
 
 
-# Скриншот
+# Приложения
 ksu_R_1 = KeyboardButton('Заблокированно')
 ksu_R_2 = KeyboardButton('Заблокированно')
 ksu_R_3 = KeyboardButton('Назад')
@@ -151,6 +152,27 @@ ksu_s_9 = KeyboardButton('Назад')
 ksu_s_10 = KeyboardButton('Пожалуй, пойду')
 kb_son = ReplyKeyboardMarkup(resize_keyboard=True)
 kb_son.row(ksu_s_1, ksu_s_2, ksu_s_3).add(ksu_s_9).insert(ksu_s_10)
+
+
+# Мышь
+ksu_mouse_1 = KeyboardButton('↑')
+ksu_mouse1_1 = KeyboardButton('↑↑')
+ksu_mouse_2 = KeyboardButton('←')
+ksu_mouse1_2 = KeyboardButton('←←')
+ksu_mouse_3 = KeyboardButton('Л')
+ksu_mouse1_3 = KeyboardButton('2Л')
+ksu_mouse2_3 = KeyboardButton('П')
+ksu_mouse_4 = KeyboardButton('→')
+ksu_mouse1_4 = KeyboardButton('→→')
+ksu_mouse_5 = KeyboardButton('↓')
+ksu_mouse1_5 = KeyboardButton('↓↓')
+ksu_mouse_6 = KeyboardButton('Назад')
+ksu_mouse_7 = KeyboardButton('up')
+ksu_mouse_8 = KeyboardButton('down')
+kb_mouse = ReplyKeyboardMarkup(resize_keyboard=True)
+kb_mouse.add(ksu_mouse1_1, ksu_mouse_1, ksu_mouse_7).row(ksu_mouse1_2, ksu_mouse_2, ksu_mouse_3, ksu_mouse1_3, ksu_mouse2_3, ksu_mouse_4, ksu_mouse1_4).add(ksu_mouse1_5, ksu_mouse_5, ksu_mouse_8).add(ksu_mouse_6)
+
+
 '''*********************************************************'''
 
 
