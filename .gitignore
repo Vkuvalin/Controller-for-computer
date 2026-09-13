@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+
+# IDE
+.idea/
+
+# Secrets
+.env
+
+# Runtime data
+telegram_bot/archive.txt
+telegram_bot/screenshot/*.png
+telegram_bot/сhat.txt
+
+# Keep runtime directory
+!telegram_bot/screenshot/.gitkeep
